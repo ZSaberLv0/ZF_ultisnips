@@ -1,0 +1,22 @@
+snippet snip "snippet define" bA
+`!p snip.rv = "snippet"` ${1:{snip_key}} "${2:{desc}}" ${3:bA}
+${0:${VISUAL}}
+`!p snip.rv = "endsnippet"`
+endsnippet
+
+global !p
+def _code_token():
+    return "`"
+endglobal
+snippet rv "ref value" iA
+`!p snip.rv = _code_token()`!p snip.rv = t[${1:1}]`!p snip.rv = _code_token()`
+endsnippet
+
+snippet func "function" bA
+`!p snip.rv = "global"` !p
+`!p snip.rv = "def"` ${1:{FuncName}}():
+	return ${2:{ReturnValue}}
+`!p snip.rv = "endglobal"`
+
+endsnippet
+

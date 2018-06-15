@@ -1,0 +1,26 @@
+snippet func "function" bA
+function! ${1:{func_name}}($2)
+	$3
+endfunction
+endsnippet
+
+snippet augroup "augroup" bA
+augroup ${1:{group_name}}
+	autocmd!
+	autocmd ${2:{Event}} ${3:{action}}
+augroup END
+endsnippet
+
+snippet command "command" bA
+command! -nargs=${1:+} -complete=${2:dir} ${3:{cmd_name}} :call ${4:{action}}(<f-args>)
+endsnippet
+
+snippet plug "Plug 'UserName/PlugName'" bA
+if !exists('g:${1:{PlugCondName}}')
+	let g:`!p snip.rv = t[1]`=1
+endif
+if g:`!p snip.rv = t[1]`==1
+	Plug '${2:{UserName}}/${3:{PlugName}}'
+endif
+endsnippet
+
