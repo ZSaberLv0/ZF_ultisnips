@@ -1,3 +1,5 @@
+priority -10
+
 # ============================================================
 snippet snip "snippet define" bA
 `!p snip.rv = "snippet"` ${1:{snip_key}} "${2:{desc}}" ${3:bA}
@@ -10,7 +12,7 @@ global !p
 def _code_token():
     return "`"
 endglobal
-snippet snirv "ref value" iA
+snippet rv "ref snip value" i
 `!p snip.rv = _code_token()`!p snip.rv = t[${1:1}]`!p snip.rv = _code_token()`
 endsnippet
 

@@ -1,5 +1,23 @@
+priority -10
+
+extends c
+
 # ============================================================
-snippet zfcls "zfclass declare" bA
+snippet doc "Doxygen doc declare" b
+/**
+ * @brief ${1:{desc}}
+ */
+endsnippet
+
+# ============================================================
+snippet @code "Doxygen @code declare" iA
+@code
+*   ${1:{content}}
+* @endcode
+endsnippet
+
+# ============================================================
+snippet zfclass "zfclass declare" bm
 /**
  * @brief ${3:{desc}}
  */
@@ -14,7 +32,7 @@ public:
 endsnippet
 
 # ============================================================
-snippet zfitf "zfinterface declare" bA
+snippet zfinterface "zfinterface declare" bm
 /**
  * @brief ${2:{desc}}
  */

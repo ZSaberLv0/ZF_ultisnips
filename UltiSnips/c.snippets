@@ -1,0 +1,10 @@
+priority -10
+
+# ============================================================
+snippet for "for loop declare" b
+for(${1:int} ${2:i} = ${3:0}; `!p snip.rv = t[2]` < ${4:{cond}}; ++`!p snip.rv = t[2]`)
+{
+	${5:${contents}}
+}
+endsnippet
+
