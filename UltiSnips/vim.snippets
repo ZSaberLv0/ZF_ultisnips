@@ -1,14 +1,7 @@
 priority -10
 
 # ============================================================
-snippet func "function declare" bA
-function! ${1:{func_name}}($2)
-	$3
-endfunction
-endsnippet
-
-# ============================================================
-snippet aug "augroup declare" bA
+snippet augroup "augroup declare" bA
 augroup ${1:{group_name}}
 	autocmd!
 	autocmd ${2:{Event}} ${3:{action}}
@@ -16,8 +9,37 @@ augroup END
 endsnippet
 
 # ============================================================
-snippet cmd "command declare" bA
+snippet command "command declare" bA
 command! -nargs=${1:+} -complete=${2:dir} ${3:{cmd_name}} :call ${4:{action}}(<f-args>)
+endsnippet
+
+# ============================================================
+snippet exists "exists check" i
+exists('${1:{content}}')
+endsnippet
+
+# ============================================================
+snippet for "for loop" bA
+for ${1:{i}} in ${2:{range}}
+endfor
+endsnippet
+
+# ============================================================
+snippet func "function declare" bA
+function! ${1:{func_name}}($2)
+	$3
+endfunction
+endsnippet
+
+# ============================================================
+snippet has "has feature check" i
+has('${1:{feature}}')
+endsnippet
+
+# ============================================================
+snippet if "if statement" bA
+if ${1:{cond}}
+endif
 endsnippet
 
 # ============================================================
@@ -28,5 +50,22 @@ endif
 if g:`!p snip.rv = t[1]`==1
 	Plug '${2:{UserName}}/${3:{PlugName}}'
 endif
+endsnippet
+
+# ============================================================
+snippet try "try catch" bA
+try
+	${1:{content}}
+catch
+	${2:{catch}}
+finally
+	${3:{finally}}
+endtry
+endsnippet
+
+# ============================================================
+snippet while "while loop" bA
+while ${1:{cond}}
+endwhile
 endsnippet
 

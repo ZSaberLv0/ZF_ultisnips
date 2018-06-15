@@ -3,13 +3,6 @@ priority -10
 extends c
 
 # ============================================================
-snippet doc "Doxygen doc declare" b
-/**
- * @brief ${1:{desc}}
- */
-endsnippet
-
-# ============================================================
 snippet @code "Doxygen @code declare" iA
 @code
 *   ${1:{content}}
@@ -17,7 +10,27 @@ snippet @code "Doxygen @code declare" iA
 endsnippet
 
 # ============================================================
-snippet zfclass "zfclass declare" bm
+snippet doc "Doxygen doc declare" b
+/**
+ * @brief ${1:{desc}}
+ */
+endsnippet
+
+
+
+
+
+
+# ============================================================
+snippet zfbtn "button click" bA
+ZFLISTENER_LOCAL(`!p snip.rv = t[2]`, {
+		${4:{content}}
+	})
+${1:{btn}}->observerAdd(ZFUIButton::EventButtonOnClick(), ${2:onClick}, ${3:{userData}});
+endsnippet
+
+# ============================================================
+snippet zfclass "zfclass declare" bmA
 /**
  * @brief ${3:{desc}}
  */
@@ -32,7 +45,7 @@ public:
 endsnippet
 
 # ============================================================
-snippet zfinterface "zfinterface declare" bm
+snippet zfinterface "zfinterface declare" bmA
 /**
  * @brief ${2:{desc}}
  */
@@ -60,13 +73,5 @@ ${1:{obj}}->observerRemove(
 	${2:{Class}}::Event${3:{Name}},
 	${4:{observer}},
 	${5:{UserData}});
-endsnippet
-
-# ============================================================
-snippet zfbtn "button click" bA
-ZFLISTENER_LOCAL(`!p snip.rv = t[2]`, {
-		${4:{content}}
-	})
-${1:{btn}}->observerAdd(ZFUIButton::EventButtonOnClick(), ${2:onClick}, ${3:{userData}});
 endsnippet
 

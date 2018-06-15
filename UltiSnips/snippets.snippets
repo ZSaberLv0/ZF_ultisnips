@@ -1,10 +1,12 @@
 priority -10
 
 # ============================================================
-snippet snip "snippet define" bA
-`!p snip.rv = "snippet"` ${1:{snip_key}} "${2:{desc}}" ${3:bA}
-${0:${VISUAL}}
-`!p snip.rv = "endsnippet"`
+snippet func "function" bA
+`!p snip.rv = "global"` !p
+`!p snip.rv = "def"` ${1:{FuncName}}():
+	return ${2:{ReturnValue}}
+`!p snip.rv = "endglobal"`
+
 endsnippet
 
 # ============================================================
@@ -17,11 +19,9 @@ snippet rv "ref snip value" i
 endsnippet
 
 # ============================================================
-snippet func "function" bA
-`!p snip.rv = "global"` !p
-`!p snip.rv = "def"` ${1:{FuncName}}():
-	return ${2:{ReturnValue}}
-`!p snip.rv = "endglobal"`
-
+snippet snip "snippet define" bA
+`!p snip.rv = "snippet"` ${1:{snip_key}} "${2:{desc}}" ${3:bA}
+${0:${VISUAL}}
+`!p snip.rv = "endsnippet"`
 endsnippet
 
