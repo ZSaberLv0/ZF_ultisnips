@@ -1,21 +1,25 @@
-snippet func "function" bA
+# ============================================================
+snippet func "function declare" bA
 function! ${1:{func_name}}($2)
 	$3
 endfunction
 endsnippet
 
-snippet augroup "augroup" bA
+# ============================================================
+snippet augroup "augroup declare" bA
 augroup ${1:{group_name}}
 	autocmd!
 	autocmd ${2:{Event}} ${3:{action}}
 augroup END
 endsnippet
 
-snippet command "command" bA
+# ============================================================
+snippet command "command declare" bA
 command! -nargs=${1:+} -complete=${2:dir} ${3:{cmd_name}} :call ${4:{action}}(<f-args>)
 endsnippet
 
-snippet plug "Plug 'UserName/PlugName'" bA
+# ============================================================
+snippet plug "plugin declare" bA
 if !exists('g:${1:{PlugCondName}}')
 	let g:`!p snip.rv = t[1]`=1
 endif

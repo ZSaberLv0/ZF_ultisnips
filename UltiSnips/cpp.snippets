@@ -1,0 +1,54 @@
+# ============================================================
+snippet zfcls "zfclass declare" bA
+/**
+ * @brief ${3:{desc}}
+ */
+zfclass ZF_ENV_EXPORT ${1:{ClassName}} : zfextends ${2:ZFObject}
+{
+	ZFOBJECT_DECLARE(`!p snip.rv = t[1]`, `!p snip.rv = t[2]`)
+
+public:
+	$4
+};
+
+endsnippet
+
+# ============================================================
+snippet zfitf "zfinterface declare" bA
+/**
+ * @brief ${2:{desc}}
+ */
+zfinterface ZF_ENV_EXPORT ${1:{ClassName}} : zfextends ZFInterface
+{
+	ZFINTERFACE_DECLARE(`!p snip.rv = t[1]`, ZFInterface)
+
+public:
+	$3
+};
+
+endsnippet
+
+# ============================================================
+snippet zfobad "observerAdd" bA
+${1:{obj}}->observerAdd(
+	${2:{Class}}::Event${3:{Name}},
+	${4:{observer}},
+	${5:{UserData}});
+endsnippet
+
+# ============================================================
+snippet zfobrm "observerRemove" bA
+${1:{obj}}->observerRemove(
+	${2:{Class}}::Event${3:{Name}},
+	${4:{observer}},
+	${5:{UserData}});
+endsnippet
+
+# ============================================================
+snippet zfbtn "button click" bA
+ZFLISTENER_LOCAL(`!p snip.rv = t[2]`, {
+		${4:{content}}
+	})
+${1:{btn}}->observerAdd(ZFUIButton::EventButtonOnClick(), ${2:onClick}, ${3:{userData}});
+endsnippet
+
