@@ -1,7 +1,7 @@
 priority -10
 
 # ============================================================
-snippet func "function" bA
+snippet func "function" b
 global !p
 def ${1:{FuncName}}():
 	return ${2:{ReturnValue}}
@@ -15,7 +15,7 @@ snippet rv "ref to snip value" i
 endsnippet
 
 # ============================================================
-snippet snip "snippet define" bA
+snippet snip "snippet define" b
 `!p snip.rv = "snippet"` ${1:{snip_key}} "${2:{desc}}" ${3:bA}
 ${0:${VISUAL}}
 `!p snip.rv = "endsnippet"`
