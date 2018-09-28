@@ -3,22 +3,8 @@ priority -10
 extends c
 
 # ============================================================
-snippet @code "Doxygen @code declare" iA
-@code
-*   ${1:{content}}
-* @endcode
-endsnippet
-
-# ============================================================
-snippet doc "Doxygen doc declare" b
-/**
- * @brief ${1:{desc}}
- */
-endsnippet
-
-# ============================================================
 snippet forit "iterator for loop declare" b
-for(${1:map}::iterator ${2:it} = ${3:{m}}.begin(); `!p snip.rv = t[2]` != `!p snip.rv = t[3]`.end(); ++`!p snip.rv = t[2]`)
+for(${1:${map}}::iterator ${2:it} = ${3:${m}}.begin(); `!p snip.rv = t[2]` != `!p snip.rv = t[3]`.end(); ++`!p snip.rv = t[2]`)
 {
 	${5:${contents}}
 }

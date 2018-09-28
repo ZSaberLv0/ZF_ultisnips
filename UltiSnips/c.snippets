@@ -1,10 +1,30 @@
 priority -10
 
 # ============================================================
+snippet #ifndef "#ifndef guard" bA
+#ifndef ${1:${_SomeHeader_h_}}
+#define `!p snip.rv = t[1]`
+$2
+#endif // #ifndef `!p snip.rv = t[1]`
+endsnippet
+
+# ============================================================
 snippet for "for loop declare" b
-for(${1:int} ${2:i} = ${3:0}; `!p snip.rv = t[2]` < ${4:{cond}}; ++`!p snip.rv = t[2]`)
+for(${1:int} ${2:i} = ${3:0}; `!p snip.rv = t[2]` < ${4:${cond}}; ++`!p snip.rv = t[2]`)
 {
 	${5:${contents}}
+}
+endsnippet
+
+# ============================================================
+snippet switch "switch case declare" b
+switch(${1:${cond}})
+{
+	case ${2:${case1}}:
+		$3
+		break;
+	default:
+		break;
 }
 endsnippet
 
