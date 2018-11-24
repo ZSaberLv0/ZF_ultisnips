@@ -1,23 +1,30 @@
 priority -10
 
 # ============================================================
-snippet func "function" b
+snippet func "function" bm
 global !p
 def ${1:${FuncName}}():
 	return ${2:${ReturnValue}}
 endglobal
-
+${3}
 endsnippet
 
 # ============================================================
 snippet rv "ref to snip value" i
-\`!p snip.rv = t[${1:1}]\`
+\`!p snip.rv = t[${1:1}]\`${2}
 endsnippet
 
 # ============================================================
-snippet snip "snippet define" b
-`!p snip.rv = "snippet"` ${1:${snip_key}} "${2:${desc}}" ${3:bA}
-${0:${VISUAL}}
+snippet snip "snippet define" bm
+# ============================================================
+${4:# b : beginning of line
+# i : in word
+# w : word boundary
+# m : trim right space
+# A : expand automatically
+}`!p snip.rv = "snippet"` ${1:${snip_key}} "${2:${desc}}" ${3:bm}
+${5}
 `!p snip.rv = "endsnippet"`
+${6}
 endsnippet
 

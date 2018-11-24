@@ -1,16 +1,16 @@
 priority -10
 
 # ============================================================
-snippet @code "Doxygen @code declare" iA
+snippet @code "Doxygen @code declare" wm
 @code
 *   ${1:${content}}
-* @endcode
+* @endcode${2}
 endsnippet
 
 # ============================================================
-snippet doc "Doxygen doc declare" b
+snippet doc "Doxygen doc declare" bm
 /**
  * @brief ${1:${desc}}
- */
+ */${2}
 endsnippet
 

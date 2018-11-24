@@ -1,0 +1,57 @@
+priority -10
+
+# ============================================================
+snippet paramcheck "param empty check" bm
+if test "x\$${1:Param0}" = "x" || test "x\$${2:Param1}" = "x" ; then
+	${3:echo "show usage"}
+	exit 1
+fi${4}
+endsnippet
+
+# ============================================================
+snippet parentpath "parent path" bm
+${2:ResultName}=\${${1:ParamName}%[/\\\\]*}${3}
+endsnippet
+
+# ============================================================
+snippet filename "file name" bm
+${2:ResultName}=\${${1:ParamName}##*[/\\\\]}${3}
+endsnippet
+
+# ============================================================
+snippet filebasename "file base name without ext" bm
+${2:ResultName}=\$(basename \${${1:ParamName}%.*})${3}
+endsnippet
+
+# ============================================================
+snippet fileext "file ext" bm
+${2:ResultName}=\${${1:ParamName}##*.}${3}
+endsnippet
+
+# ============================================================
+snippet abspath "absolute path" bm
+${2:ResultName}=$(cd -- "\$${1:RelativePath}" && pwd)${3}
+endsnippet
+
+# ============================================================
+snippet extcmd "external command" bm
+${2:ResultName} = \`${1:ExtCmd}\`${3}
+endsnippet
+
+# ============================================================
+snippet nul "output to null" im
+>/dev/null 2>&1${1}
+endsnippet
+
+# ============================================================
+snippet exist "file or dir exist" bm
+if test -e "${1:FilePath}"; then
+	${2}
+fi${3}
+endsnippet
+
+# ============================================================
+snippet calc "calc" bm
+${2:ResultName}=\$((${1:A+B}))${3}
+endsnippet
+

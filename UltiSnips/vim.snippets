@@ -1,71 +1,71 @@
 priority -10
 
 # ============================================================
-snippet augroup "augroup declare" b
+snippet augroup "augroup declare" bm
 augroup ${1:${group_name}}
 	autocmd!
 	autocmd ${2:${Event}} ${3:${action}}
-augroup END
+augroup END${4}
 endsnippet
 
 # ============================================================
-snippet command "command declare" b
-command! -nargs=${1:+} -complete=${2:dir} ${3:${cmd_name}} :call ${4:${action}}(<f-args>)
+snippet command "command declare" bm
+command! -nargs=${1:+} -complete=${2:dir} ${3:${cmd_name}} :call ${4:${action}}(<f-args>)${5}
 endsnippet
 
 # ============================================================
-snippet exists "exists check" i
-exists('${1:${content}}')
+snippet exists "exists check" im
+exists('${1:${content}}')${2}
 endsnippet
 
 # ============================================================
-snippet for "for loop" b
+snippet for "for loop" bm
 for ${1:${i}} in ${2:${range}}
-endfor
+endfor${3}
 endsnippet
 
 # ============================================================
-snippet func "function declare" b
-function! ${1:${func_name}}($2)
-	$3
-endfunction
+snippet func "function declare" bm
+function! ${1:${func_name}}(${2})
+	${3}
+endfunction${4}
 endsnippet
 
 # ============================================================
-snippet has "has feature check" i
-has('${1:${feature}}')
+snippet has "has feature check" im
+has('${1:${feature}}')${2}
 endsnippet
 
 # ============================================================
-snippet if "if statement" b
+snippet if "if statement" bm
 if ${1:${cond}}
-endif
+endif${2}
 endsnippet
 
 # ============================================================
-snippet plug "plugin declare" b
+snippet plug "plugin declare" bm
 if !exists('g:${1:${PlugCondName}}')
 	let g:`!p snip.rv = t[1]`=1
 endif
 if g:`!p snip.rv = t[1]`==1
 	${4:Plug} '${2:${UserName}}/${3:${PlugName}}'
-endif
+endif${5}
 endsnippet
 
 # ============================================================
-snippet try "try catch" b
+snippet try "try catch" bm
 try
 	${1:${content}}
 catch
 	${2:${catch}}
 finally
 	${3:${finally}}
-endtry
+endtry${4}
 endsnippet
 
 # ============================================================
-snippet while "while loop" b
+snippet while "while loop" bm
 while ${1:${cond}}
-endwhile
+endwhile${2}
 endsnippet
 
