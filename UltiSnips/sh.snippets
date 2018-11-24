@@ -44,10 +44,10 @@ snippet nul "output to null" im
 endsnippet
 
 # ============================================================
-snippet exist "file or dir exist" bm
-if test -e "${1:FilePath}"; then
-	${2}
-fi${3}
+snippet fileexist "file or dir exist" bm
+if ${2:! }test -e "${1:FilePath}"; then
+	${3}
+fi${4}
 endsnippet
 
 # ============================================================

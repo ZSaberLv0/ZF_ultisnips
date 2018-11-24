@@ -48,10 +48,10 @@ snippet nul "output to null" im
 endsnippet
 
 # ============================================================
-snippet exist "file or dir exist" bm
-if exist "${1:FilePath}" (
-	echo exist
-)${2}
+snippet fileexist "file or dir exist" bm
+if ${2:not }exist "${1:FilePath}" (
+	${3}
+)${4}
 endsnippet
 
 # ============================================================
