@@ -2,12 +2,12 @@ priority -10
 
 # ============================================================
 snippet cron "crontab expand" bm
-${4:# minute [0-59]
+${6:# minute [0-59]
 # hour [0-23]
 # day of month [1-31]
 # month [1-12]
 # day of week [0-6]
 # user command
-}${2:59} ${3:0} ${4:*} ${5:*} ${6:*} ${1:command}
+}${1:59} ${2:0} ${3:*} ${4:*} ${5:*} ${7:command}
 endsnippet
 
