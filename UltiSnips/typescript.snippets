@@ -1,0 +1,16 @@
+priority -10
+
+# ============================================================
+snippet for "for each" bm
+for(let ${1:{varName}} of ${2:{listName}}) {
+	${3}
+}${4}
+endsnippet
+
+# ============================================================
+snippet set "setter and getter" bm
+private _`!p snip.rv = t[1]`: ${2:string} = null;
+set ${1:{varName}}(`!p snip.rv = t[1]`: `!p snip.rv = t[2]`) { this._`!p snip.rv = t[1]` = `!p snip.rv = t[1]`; }
+get `!p snip.rv = t[1]`(): `!p snip.rv = t[2]` { return this._`!p snip.rv = t[1]`; }${3}
+endsnippet
+
