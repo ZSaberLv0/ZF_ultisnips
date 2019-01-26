@@ -9,8 +9,21 @@ endsnippet
 
 # ============================================================
 snippet set "setter and getter" bm
-private _`!p snip.rv = t[1]`: ${2:string} = null;
-set ${1:{varName}}(`!p snip.rv = t[1]`: `!p snip.rv = t[2]`) { this._`!p snip.rv = t[1]` = `!p snip.rv = t[1]`; }
+private _`!p snip.rv = t[1]`: `!p snip.rv = t[2]` = null;
+set ${1:{varName}}(`!p snip.rv = t[1]`: ${2:string}) { this._`!p snip.rv = t[1]` = `!p snip.rv = t[1]`; }
 get `!p snip.rv = t[1]`(): `!p snip.rv = t[2]` { return this._`!p snip.rv = t[1]`; }${3}
+endsnippet
+
+# ============================================================
+snippet instance "instance" bm
+// ============================================================
+// instance
+private static _instance: `!p snip.rv = t[1]` = null;
+public static instance(): ${1:{ClassName}} {
+	if (`!p snip.rv = t[1]`._instance == null) {
+		`!p snip.rv = t[1]`._instance = new `!p snip.rv = t[1]`();
+	}
+	return `!p snip.rv = t[1]`._instance;
+}${2}
 endsnippet
 
