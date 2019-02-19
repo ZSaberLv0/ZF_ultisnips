@@ -2,7 +2,7 @@ priority -10
 
 # ============================================================
 snippet paramcheck "param empty check" bm
-if test "x\$${1:Param0}" = "x" || test "x\$${2:Param1}" = "x" ; then
+if test "x-\$${1:Param0}" = "x" || test "x-\$${2:Param1}" = "x" ; then
 	${3:echo "show usage"}
 	exit 1
 fi${4}
