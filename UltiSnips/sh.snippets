@@ -1,36 +1,8 @@
 priority -10
 
 # ============================================================
-snippet paramcheck "param empty check" bm
-if test "x-\$${1:Param0}" = "x-" || test "x-\$${2:Param1}" = "x-" ; then
-	${3:echo "show usage"}
-	exit 1
-fi${4}
-endsnippet
-
-# ============================================================
-snippet parentpath "parent path" bm
-${2:ResultName}=\${${1:ParamName}%[/\\\\]*}${3}
-endsnippet
-
-# ============================================================
-snippet filename "file name" bm
-${2:ResultName}=\${${1:ParamName}##*[/\\\\]}${3}
-endsnippet
-
-# ============================================================
-snippet filebasename "file base name without ext" bm
-${2:ResultName}=\$(basename \${${1:ParamName}%.*})${3}
-endsnippet
-
-# ============================================================
-snippet fileext "file ext" bm
-${2:ResultName}=\${${1:ParamName}##*.}${3}
-endsnippet
-
-# ============================================================
-snippet abspath "absolute path" bm
-${2:ResultName}=$(cd -- "\$${1:RelativePath}" && pwd)${3}
+snippet calc "calc" bm
+${2:ResultName}=\$((${1:A+B}))${3}
 endsnippet
 
 # ============================================================
@@ -39,8 +11,8 @@ ${2:ResultName} = \`${1:ExtCmd}\`${3}
 endsnippet
 
 # ============================================================
-snippet nul "output to null" im
->/dev/null 2>&1${1}
+snippet filebasename "file base name without ext" bm
+${2:ResultName}=\$(basename \${${1:ParamName}%.*})${3}
 endsnippet
 
 # ============================================================
@@ -51,7 +23,46 @@ fi${4}
 endsnippet
 
 # ============================================================
-snippet calc "calc" bm
-${2:ResultName}=\$((${1:A+B}))${3}
+snippet fileext "file ext" bm
+${2:ResultName}=\${${1:ParamName}##*.}${3}
+endsnippet
+
+# ============================================================
+snippet filename "file name" bm
+${2:ResultName}=\${${1:ParamName}##*[/\\\\]}${3}
+endsnippet
+
+# ============================================================
+snippet null "output to null" im
+>/dev/null 2>&1${1}
+endsnippet
+
+# ============================================================
+snippet paramcheck "param empty check" bm
+if test "x-\$${1:Param0}" = "x-" || test "x-\$${2:Param1}" = "x-" ; then
+	${3:echo "show usage"}
+	exit 1
+fi${4}
+endsnippet
+
+# ============================================================
+snippet paramtest "param value test" bm
+if test "x-\$${1:Param}" = "x-${2:{TestValue0}}" ; then
+	${3:{Action0}}
+elif test "x-\$`!p snip.rv = t[1]`" = "x-${4:{TestValue1}}" ; then
+	${5:{Action1}}
+else
+	${6:{Action2}}
+fi${7}
+endsnippet
+
+# ============================================================
+snippet pathabs "absolute path" bm
+${2:ResultName}=$(cd -- "\$${1:RelativePath}" && pwd)${3}
+endsnippet
+
+# ============================================================
+snippet pathparent "parent path" bm
+${2:ResultName}=\${${1:ParamName}%[/\\\\]*}${3}
 endsnippet
 

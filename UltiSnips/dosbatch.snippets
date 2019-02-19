@@ -1,6 +1,44 @@
 priority -10
 
 # ============================================================
+snippet calc "calc" bm
+set /a ${2:ResultName}=${1:A+B}${3}
+endsnippet
+
+# ============================================================
+snippet extcmd "external command" bm
+for /f "delims=" %%a in ('${1:ExtCmd}') do @set ${2:ResultName}=%%a${3}
+endsnippet
+
+# ============================================================
+snippet filebasename "file base name without ext" bm
+for %%a in (%${1:ParamName}%) do set ${2:ResultName}=%%~na${3}
+endsnippet
+
+# ============================================================
+snippet fileexist "file or dir exist" bm
+if ${2:not }exist "${1:FilePath}" (
+	${3}
+)${4}
+endsnippet
+
+# ============================================================
+snippet fileext "file ext" bm
+for %%a in (%${1:ParamName}%) do set ${2:ResultName}=%%~xa
+set `!p snip.rv = t[2]`=%`!p snip.rv = t[2]`:~1,999%${3}
+endsnippet
+
+# ============================================================
+snippet filename "file name" bm
+for %%a in (%${1:ParamName}%) do set ${2:ResultName}=%%~nxa${3}
+endsnippet
+
+# ============================================================
+snippet null "output to null" im
+>nul 2>&1${1}
+endsnippet
+
+# ============================================================
 snippet paramcheck "param empty check" bm
 if not defined ${1:Param0} goto :usage
 if not defined ${2:Param1} goto :usage
@@ -12,50 +50,25 @@ exit /b 1
 endsnippet
 
 # ============================================================
-snippet parentpath "parent path" bm
-for %%a in (%${1:ParamName}%\..) do set ${2:ResultName}=%%~fa${3}
+snippet paramtest "param value test" bm
+if "%${1:Param}%" == "${2:{TestValue0}}" (
+	${3:{Action0}}
+) else (
+	if "%`!p snip.rv = t[1]`%" == "${4:{TestValue1}}" (
+		${5:{Action1}}
+	) else (
+		${6:{Action2}}
+	)
+)${7}
 endsnippet
 
 # ============================================================
-snippet filename "file name" bm
-for %%a in (%${1:ParamName}%) do set ${2:ResultName}=%%~nxa${3}
-endsnippet
-
-# ============================================================
-snippet filebasename "file base name without ext" bm
-for %%a in (%${1:ParamName}%) do set ${2:ResultName}=%%~na${3}
-endsnippet
-
-# ============================================================
-snippet fileext "file ext" bm
-for %%a in (%${1:ParamName}%) do set ${2:ResultName}=%%~xa
-set `!p snip.rv = t[2]`=%`!p snip.rv = t[2]`:~1,999%${3}
-endsnippet
-
-# ============================================================
-snippet abspath "absolute path" bm
+snippet pathabs "absolute path" bm
 for %%i in (%${1:RelativePath}%) do set ${2:ResultName}=%%~fi${3}
 endsnippet
 
 # ============================================================
-snippet extcmd "external command" bm
-for /f "delims=" %%a in ('${1:ExtCmd}') do @set ${2:ResultName}=%%a${3}
-endsnippet
-
-# ============================================================
-snippet nul "output to null" im
->nul 2>&1${1}
-endsnippet
-
-# ============================================================
-snippet fileexist "file or dir exist" bm
-if ${2:not }exist "${1:FilePath}" (
-	${3}
-)${4}
-endsnippet
-
-# ============================================================
-snippet calc "calc" bm
-set /a ${2:ResultName}=${1:A+B}${3}
+snippet pathparent "parent path" bm
+for %%a in (%${1:ParamName}%\..) do set ${2:ResultName}=%%~fa${3}
 endsnippet
 
