@@ -6,6 +6,11 @@ ${2:ResultName}=\$((${1:A+B}))${3}
 endsnippet
 
 # ============================================================
+snippet CD "current dir" bm
+${1:WORK_DIR}=\$(cd "\$(dirname "\$0")"; pwd)${2}
+endsnippet
+
+# ============================================================
 snippet extcmd "external command" bm
 ${2:ResultName} = \`${1:ExtCmd}\`${3}
 endsnippet

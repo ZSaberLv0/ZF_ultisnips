@@ -6,6 +6,11 @@ set /a ${2:ResultName}=${1:A+B}${3}
 endsnippet
 
 # ============================================================
+snippet CD "current dir" bm
+set ${1:WORK_DIR}=%~dp0${2}
+endsnippet
+
+# ============================================================
 snippet extcmd "external command" bm
 for /f "delims=" %%a in ('${1:ExtCmd}') do @set ${2:ResultName}=%%a${3}
 endsnippet
