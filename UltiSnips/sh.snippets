@@ -6,7 +6,12 @@ ${2:ResultName}=\$((${1:A+B}))${3}
 endsnippet
 
 # ============================================================
-snippet CD "current dir" bm
+snippet cd "current dir" bm
+${1:_OLD_DIR}=\$(pwd)${2}
+endsnippet
+
+# ============================================================
+snippet CD "current script dir" bm
 ${1:WORK_DIR}=\$(cd "\$(dirname "\$0")"; pwd)${2}
 endsnippet
 
