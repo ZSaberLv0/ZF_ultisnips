@@ -10,8 +10,8 @@ endsnippet
 # ============================================================
 snippet set "setter and getter" bm
 private _`!p snip.rv = t[1]`: `!p snip.rv = t[2]` = ${3:null};
-set ${1:{varName}}(`!p snip.rv = t[1]`: ${2:string}) { this._`!p snip.rv = t[1]` = `!p snip.rv = t[1]`; }
-get `!p snip.rv = t[1]`(): `!p snip.rv = t[2]` { return this._`!p snip.rv = t[1]`; }${4}
+public set ${1:{varName}}(`!p snip.rv = t[1]`: ${2:string}) { this._`!p snip.rv = t[1]` = `!p snip.rv = t[1]`; }
+public get `!p snip.rv = t[1]`(): `!p snip.rv = t[2]` { return this._`!p snip.rv = t[1]`; }${4}
 endsnippet
 
 # ============================================================
