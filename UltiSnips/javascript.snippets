@@ -1,0 +1,36 @@
+priority -10
+
+# ============================================================
+snippet umd "UMD module template" bm
+(function(root, depNames, moduleName, factory) {
+    if (typeof define === 'function' && define.amd) {
+        define(depNames, function() {
+            factory(arguments);
+        });
+    } else if (typeof exports === 'object' && typeof module !== 'undefined') {
+        var deps = [];
+        for (var i = 0; i < depNames.length; ++i) {
+            deps.push(require(depNames[i]));
+        }
+        module.exports = factory(deps);
+    } else {
+        root = root || self;
+        var deps = [];
+        for (var i = 0; i < depNames.length; ++i) {
+            deps.push(root[depNames[i]]);
+        }
+        var apis = factory(deps);
+        root.returnExports = {};
+        root.returnExports[moduleName] = apis;
+        root[moduleName] = apis;
+    }
+}(this, [ // depNames${3}
+], '${1:YourModuleName}', function(deps) {
+    return {
+        ${2:myFunc: function(aa) {
+            console.log(aa);
+        },}
+    };
+}))${4}
+endsnippet
+
