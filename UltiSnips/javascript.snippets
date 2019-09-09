@@ -24,9 +24,9 @@ snippet umd "UMD module template" bm
         root.returnExports[moduleName] = apis;
         root[moduleName] = apis;
     }
-}(this, [ // depNames${3}
+}(this, [ // depNames${2}
 ], '${1:YourModuleName}', function(deps) {
-    return ${2:{
+    return ${3:{
         myFunc: function(aa) {
             console.log(aa);
         },
