@@ -3,34 +3,38 @@ priority -10
 # ============================================================
 snippet umd "UMD module template" bm
 (function(root, depNames, moduleName, factory) {
-    if (typeof exports === 'object' && typeof module !== 'undefined') {
-        var deps = [];
-        for (var i = 0; i < depNames.length; ++i) {
-            deps.push(require(depNames[i]));
-        }
-        module.exports = factory(deps);
-    } else if (typeof define === 'function' && define.amd) {
-        define(depNames, function() {
-            factory(arguments);
-        });
-    } else {
-        root = root || self;
-        var deps = [];
-        for (var i = 0; i < depNames.length; ++i) {
-            deps.push(root[depNames[i]]);
-        }
-        var apis = factory(deps);
-        root.returnExports = {};
-        root.returnExports[moduleName] = apis;
-        root[moduleName] = apis;
-    }
+	if (typeof exports === 'object' && typeof module !== 'undefined') {
+		var deps = {};
+		for (var i = 0; i < depNames.length; ++i) {
+			deps[depNames[i]] = require(depNames[i]);
+		}
+		module.exports = factory(deps);
+	} else if (typeof define === 'function' && define.amd) {
+		define(depNames, function() {
+			var deps = {};
+			for (var i = 0; i < arguments.length; ++i) {
+				deps[depNames[i]] = arguments[i];
+			}
+			factory(deps);
+		});
+	} else {
+		root = root || self;
+		var deps = {};
+		for (var i = 0; i < depNames.length; ++i) {
+			deps[depNames[i]] = root[depNames[i]];
+		}
+		var apis = factory(deps);
+		root.returnExports = {};
+		root.returnExports[moduleName] = apis;
+		root[moduleName] = apis;
+	}
 }(this, [ // depNames${2}
 ], '${1:YourModuleName}', function(deps) {
-    return ${3:{
-        myFunc: function(aa) {
-            console.log(aa);
-        },
-    }};
+	return ${3:{
+		myFunc: function(aa) {
+			console.log(aa);
+		},
+	}};
 }))${4}
 endsnippet
 
