@@ -2,7 +2,16 @@ priority -10
 
 # ============================================================
 snippet umd "UMD module template" bm
-(function(root, depNames, moduleName, factory) {
+(function(root, depNames, moduleName, factory, impl) {
+	impl(root, depNames, moduleName, factory);
+}(this, [ // depNames${2}
+], '${1:YourModuleName}', function(deps) {
+	return ${3:{
+		myFunc: function(aa) {
+			console.log(aa);
+		},
+	}};
+}, function(root, depNames, moduleName, factory) {
 	if (typeof exports === 'object' && typeof module !== 'undefined') {
 		var deps = {};
 		for (var i = 0; i < depNames.length; ++i) {
@@ -28,13 +37,6 @@ snippet umd "UMD module template" bm
 		root.returnExports[moduleName] = apis;
 		root[moduleName] = apis;
 	}
-}(this, [ // depNames${2}
-], '${1:YourModuleName}', function(deps) {
-	return ${3:{
-		myFunc: function(aa) {
-			console.log(aa);
-		},
-	}};
 }))${4}
 endsnippet
 
