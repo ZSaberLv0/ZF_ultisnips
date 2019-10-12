@@ -1,6 +1,13 @@
 priority -10
 
 # ============================================================
+snippet for "for loop" bm
+for(let ${1:i} = 0; `!p snip.rv = t[1]` < ${2:{count}}; ++`!p snip.rv = t[1]`) {
+	${3}
+}${4}
+endsnippet
+
+# ============================================================
 snippet foreach "for each" bm
 for(let ${1:{varName}} of ${2:{listName}}) {
 	${3}
