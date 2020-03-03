@@ -91,6 +91,11 @@ if "%${1:Param}%" == "${2:{TestValue0}}" (
 endsnippet
 
 # ============================================================
+snippet resultval "result value" bm
+set ${1:RESULT} = %errorlevel%${2}
+endsnippet
+
+# ============================================================
 snippet pathabs "absolute path" bm
 for %%i in (%${1:RelativePath}%) do set ${2:ResultName}=%%~fi${3}
 endsnippet

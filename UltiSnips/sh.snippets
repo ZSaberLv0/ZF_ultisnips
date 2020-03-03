@@ -82,6 +82,11 @@ fi${7}
 endsnippet
 
 # ============================================================
+snippet resultval "result value" bm
+${1:RESULT}="\$?"${2}
+endsnippet
+
+# ============================================================
 snippet pathabs "absolute path" bm
 ${2:ResultName}=$(cd -- "\$${1:RelativePath}" && pwd)${3}
 endsnippet
