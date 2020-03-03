@@ -87,6 +87,14 @@ ${1:RESULT}="\$?"${2}
 endsnippet
 
 # ============================================================
+snippet resultcheck "result value check" bm
+${1:RESULT}="\$?"
+if ! test "x-\$`!p snip.rv = t[1]`" = "x-0" ; then
+	exit \$`!p snip.rv = t[1]`
+fi${2}
+endsnippet
+
+# ============================================================
 snippet pathabs "absolute path" bm
 ${2:ResultName}=$(cd -- "\$${1:RelativePath}" && pwd)${3}
 endsnippet

@@ -96,6 +96,14 @@ set ${1:RESULT} = %errorlevel%${2}
 endsnippet
 
 # ============================================================
+snippet resultcheck "result value check" bm
+set ${1:RESULT} = %errorlevel%
+if not "%`!p snip.rv = t[1]`%" == "0" (
+	exit /b %`!p snip.rv = t[1]`%
+)${2}
+endsnippet
+
+# ============================================================
 snippet pathabs "absolute path" bm
 for %%i in (%${1:RelativePath}%) do set ${2:ResultName}=%%~fi${3}
 endsnippet
