@@ -1,6 +1,24 @@
 priority -10
 
 # ============================================================
+snippet template "file template" bm
+@echo off
+setlocal
+setlocal enabledelayedexpansion
+set WORK_DIR=%~dp0
+set ${1:DST_PATH}=%~1%
+set ${2:SRC_PATH}=%~2%
+if not defined `!p snip.rv = t[1]` goto :usage
+if not defined `!p snip.rv = t[2]` goto :usage
+goto :run
+:usage
+echo usage:
+exit /b 1
+:run
+${3}
+endsnippet
+
+# ============================================================
 snippet calc "calc" bm
 set /a ${2:ResultName}=${1:A+B}${3}
 endsnippet

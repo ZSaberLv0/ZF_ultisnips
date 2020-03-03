@@ -1,6 +1,21 @@
 priority -10
 
 # ============================================================
+snippet template "file template" bm
+WORK_DIR=\$(cd "\$(dirname "\$0")"; pwd)
+${1:DST_PATH}=\$1
+${2:SRC_PATH}=\$2
+if test "0" = "1" \
+	|| test "x-\$`!p snip.rv = t[1]`" = "x-" \
+	|| test "x-\$`!p snip.rv = t[2]`" = "x-" \
+	; then
+    echo "usage:"
+    exit 1
+fi
+${3}
+endsnippet
+
+# ============================================================
 snippet calc "calc" bm
 ${2:ResultName}=\$((${1:A+B}))${3}
 endsnippet
