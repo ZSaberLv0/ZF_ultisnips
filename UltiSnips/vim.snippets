@@ -54,6 +54,13 @@ endif${5}
 endsnippet
 
 # ============================================================
+snippet profile "profile performance test" bm
+let _start_time = reltime()
+${1}
+echo float2nr(reltimefloat(reltime(_start_time, reltime())) * 1000 * 1000)${2}
+endsnippet
+
+# ============================================================
 snippet try "try catch" bm
 try
 	${1:${content}}
