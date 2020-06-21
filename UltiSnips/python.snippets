@@ -1,0 +1,9 @@
+priority -10
+
+# ============================================================
+snippet profile "profile performance test" bm
+import time; _startTime = time.time();
+${1}
+print(int((time.time() - _startTime) * 1000))${2}
+endsnippet
+
