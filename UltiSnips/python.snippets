@@ -1,6 +1,12 @@
 priority -10
 
 # ============================================================
+snippet CD "current script dir" bm
+import os
+${1:WORK_DIR} = os.path.split(os.path.realpath(__file__))[0]${2}
+endsnippet
+
+# ============================================================
 snippet profile "profile performance test" bm
 import time; _startTime = time.time();
 ${1}
