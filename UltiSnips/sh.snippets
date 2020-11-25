@@ -36,25 +36,10 @@ ${2:ResultName} = \`${1:ExtCmd}\`${3}
 endsnippet
 
 # ============================================================
-snippet filebasename "file base name without ext" bm
-${2:ResultName}=\$(basename \${${1:ParamName}%.*})${3}
-endsnippet
-
-# ============================================================
-snippet fileexist "file or dir exist" bm
+snippet exist "file or dir exist" bm
 if ${2:! }test -e "${1:FilePath}"; then
 	${3}
 fi${4}
-endsnippet
-
-# ============================================================
-snippet fileext "file ext" bm
-${2:ResultName}=\${${1:ParamName}##*.}${3}
-endsnippet
-
-# ============================================================
-snippet filename "file name" bm
-${2:ResultName}=\${${1:ParamName}##*[/\\\\]}${3}
 endsnippet
 
 # ============================================================
@@ -63,15 +48,7 @@ snippet null "output to null" im
 endsnippet
 
 # ============================================================
-snippet paramcheck "param empty check" bm
-if test "x-\$${1:Param0}" = "x-" || test "x-\$${2:Param1}" = "x-" ; then
-	${3:echo "show usage"}
-	exit 1
-fi${4}
-endsnippet
-
-# ============================================================
-snippet paramtest "param value test" bm
+snippet if "if statement" bm
 if test "x-\$${1:Param}" = "x-${2:{TestValue0}}" ; then
 	${3:{Action0}}
 elif test "x-\$`!p snip.rv = t[1]`" = "x-${4:{TestValue1}}" ; then
@@ -79,6 +56,37 @@ elif test "x-\$`!p snip.rv = t[1]`" = "x-${4:{TestValue1}}" ; then
 else
 	${6:{Action2}}
 fi${7}
+endsnippet
+
+# ============================================================
+snippet for "for loop" bm
+for ${1:i} in \`${2:ls}\` ; do
+	${3:echo "\$`!p snip.rv = t[1]`"}
+done${4}
+endsnippet
+
+# ============================================================
+snippet foreach "foreach element" bm
+for ${1:i} in \
+	${2:a b c} \
+	; do
+	${3:echo "\$`!p snip.rv = t[1]`"}
+done${4}
+endsnippet
+
+# ============================================================
+snippet forrange "for in range" bm
+for ${1:i} in \`seq ${2:0} ${3:10}\` ; do
+	${4:echo "\$`!p snip.rv = t[1]`"}
+done${5}
+endsnippet
+
+# ============================================================
+snippet paramcheck "param empty check" bm
+if test "x-\$${1:Param0}" = "x-" || test "x-\$${2:Param1}" = "x-" ; then
+	${3:echo "show usage"}
+	exit 1
+fi${4}
 endsnippet
 
 # ============================================================
@@ -95,12 +103,27 @@ fi${2}
 endsnippet
 
 # ============================================================
-snippet pathabs "absolute path" bm
+snippet filebasename "file base name without ext" bm
+${2:ResultName}=\$(basename \${${1:ParamName}%.*})${3}
+endsnippet
+
+# ============================================================
+snippet fileext "file ext" bm
+${2:ResultName}=\${${1:ParamName}##*.}${3}
+endsnippet
+
+# ============================================================
+snippet filename "file name" bm
+${2:ResultName}=\${${1:ParamName}##*[/\\\\]}${3}
+endsnippet
+
+# ============================================================
+snippet abs "absolute path" bm
 ${2:ResultName}=$(cd -- "\$${1:RelativePath}" && pwd)${3}
 endsnippet
 
 # ============================================================
-snippet pathparent "parent path" bm
+snippet parent "parent path" bm
 ${2:ResultName}=\${${1:ParamName}%[/\\\\]*}${3}
 endsnippet
 
