@@ -1,6 +1,13 @@
 priority -10
 
 # ============================================================
+snippet profile "profile performance test" bm
+var _beginTime = Date.now();
+${2}
+console.log('${1:cost time: }' + (Date.now() - _beginTime));${3}
+endsnippet
+
+# ============================================================
 snippet umd "UMD module template" bm
 (function(root, depNames, moduleName, factory, impl) {
 	impl(root, depNames, moduleName, factory);
