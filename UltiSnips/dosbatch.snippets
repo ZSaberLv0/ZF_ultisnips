@@ -35,7 +35,15 @@ endsnippet
 
 # ============================================================
 snippet extcmd "external command" bm
-for /f "delims=" %%a in ('${1:ExtCmd}') do @set ${2:ResultName}=%%a${3}
+setlocal enabledelayedexpansion
+set ${2:ResultName}=
+for /f "delims=" %%a in ('${1:ExtCmd}') do (
+	if "!`!p snip.rv = t[2]`!" == "" (
+		set `!p snip.rv = t[2]`=%%a
+	) else (
+		set `!p snip.rv = t[2]`=!`!p snip.rv = t[2]`! %%a
+	)
+)${3}
 endsnippet
 
 # ============================================================
