@@ -123,11 +123,6 @@ ${2:ResultName}=$(cd -- "\$${1:RelativePath}" && pwd)${3}
 endsnippet
 
 # ============================================================
-snippet relpath "relative path" bm
-${3:ResultName}=\`realpath --relative-to="\$${2:RefPath}" "\$${1:AbsPath}"\`
-endsnippet
-
-# ============================================================
 snippet parent "parent path" bm
 ${2:ResultName}=\${${1:ParamName}%[/\\\\]*}${3}
 endsnippet
