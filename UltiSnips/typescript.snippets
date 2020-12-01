@@ -15,6 +15,27 @@ for(let ${1:{varName}} of ${2:{listName}}) {
 endsnippet
 
 # ============================================================
+snippet settimeout "setTimeout" bm
+setTimeout(() => {
+	${2}
+}, ${1:1000});${3}
+endsnippet
+
+# ============================================================
+snippet setinterval "setInterval" bm
+setInterval(() => {
+	${2}
+}, ${1:1000});${3}
+endsnippet
+
+# ============================================================
+snippet profile "profile performance test" bm
+let _beginTime = Date.now();
+${2}
+console.log('${1:cost time: }' + (Date.now() - _beginTime));${3}
+endsnippet
+
+# ============================================================
 snippet setter "setter and getter" bm
 private _`!p snip.rv = t[1]`: `!p snip.rv = t[2]` = ${3:null};
 public set ${1:{varName}}(`!p snip.rv = t[1]`: ${2:string}) { this._`!p snip.rv = t[1]` = `!p snip.rv = t[1]`; }
