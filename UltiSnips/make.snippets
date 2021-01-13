@@ -1,0 +1,131 @@
+priority -10
+
+# ============================================================
+snippet template "file template" bm
+${5}
+#============================================================
+# Usage:
+#   make                same as make release
+#   make debug          make a debug version
+#   make release        make a release version
+#   make run            make a debug version and run
+#   make clean          clean every output files
+#============================================================
+
+
+#============================================================
+# general project structure
+#============================================================
+# sources directories, can be one or more
+SRCDIRS         := ${1:src}
+# output directory
+OUTDIR          := ${2:out}
+OBJDIR          := \$(OUTDIR)/obj
+# the executable to build to
+TARGET          := ${3:\$(OUTDIR)/${4:a.out}}
+
+#============================================================
+# flags for different builds
+#============================================================
+BASE_FLAGS      := -Wall -DKMM_USE_ICONV
+BASE_LFLAGS     := -liconv
+DEBUG_FLAGS     := -g
+DEBUG_LFLAGS    :=
+RELEASE_FLAGS   := -O2
+RELEASE_LFLAGS  :=
+
+#============================================================
+# other
+#============================================================
+# cross-compiler
+CROSS_COMPILE   :=
+
+
+
+#============================================================
+# no need to change these
+#============================================================
+SRCEXTS     := c C cc cpp CPP c++ cxx cp
+HEADEREXTS  := h H hh hpp HPP h++ hxx hp
+CC          := gcc
+CXX         := g++
+RM          := rm -rf
+MKDIR       := mkdir -p
+# CLEAR       := clear
+CLEAR       :=
+
+# files and directories
+ALL_SRC_DIRS:=\$(strip \$(subst \,/,\$(abspath \$(shell find \$(SRCDIRS) -type d))))
+ALL_OBJ_DIRS:=\$(strip \$(foreach srcdir,\$(ALL_SRC_DIRS),\$(OBJDIR)/_\$(abspath \$(srcdir))))
+ALL_SRC_FILES:=\$(strip \$(foreach srcdir,\$(ALL_SRC_DIRS), \$(foreach srcext,\$(SRCEXTS),\$(abspath \$(wildcard \$(srcdir)/*.\$(srcext))))))
+ALL_OBJ_FILES:=\$(strip \$(foreach srcfile,\$(ALL_SRC_FILES),\$(abspath \$(OBJDIR)/_\$(addsuffix .o,\$(basename \$(srcfile))))))
+ALL_DEPEND_FILES:=\$(strip \$(foreach srcfile,\$(ALL_SRC_FILES),\$(abspath \$(OBJDIR)/_\$(addsuffix .d,\$(basename \$(srcfile))))))
+MAIN_DEPEND_FILE:=\$(OUTDIR)/.depend
+ALL_HEADER_FILES:=\$(strip \$(foreach srcdir,\$(ALL_SRC_DIRS), \$(foreach headerext,\$(HEADEREXTS),\$(abspath \$(wildcard \$(srcdir)/*.\$(headerext))))))
+ALL_CODE_FILES:=\$(ALL_SRC_FILES) \$(ALL_HEADER_FILES)
+ALL_SRC_EXCEPT_C:=\$(filter-out %.c %.C,\$(ALL_SRC_FILES))
+
+# compiler
+ifeq (\$(ALL_SRC_EXCEPT_C),)     # C program
+	CXX_FIXED:=\$(CROSS_COMPILE)\$(CC)
+else                            # C++ program
+	CXX_FIXED:=\$(CROSS_COMPILE)\$(CXX)
+endif
+
+.PHONY: all debug release run clean prebuild postbuild
+
+all: debug
+
+# Make a debug version
+debug: CXXFLAGS:=\$(BASE_FLAGS) \$(DEBUG_FLAGS)
+debug: CXXLFLAGS:=\$(BASE_LFLAGS) \$(DEBUG_LFLAGS)
+debug: \$(MAIN_DEPEND_FILE) \$(ALL_DEPEND_FILES) prebuild \$(TARGET) postbuild
+
+# Make a release version
+release: CXXFLAGS:=\$(BASE_FLAGS) \$(RELEASE_FLAGS)
+release: CXXLFLAGS:=\$(BASE_LFLAGS) \$(RELEASE_LFLAGS)
+release: \$(MAIN_DEPEND_FILE) \$(ALL_DEPEND_FILES) prebuild \$(TARGET) postbuild
+
+# Make and run
+run: debug
+	@\$(CLEAR)
+	./\$(TARGET)
+
+# Make everything go away (be clean)
+clean:
+	@\$(RM) \$(OBJDIR)
+	@\$(RM) \$(OUTDIR)
+
+# actual code dependencies section
+\$(TARGET): \$(ALL_OBJ_FILES)
+	@echo building \$(TARGET)
+	@\$(CXX_FIXED) \$(CXXFLAGS) \$+ -o \$@ \$(CXXLFLAGS)
+
+# depend file dependecies
+\$(MAIN_DEPEND_FILE):\$(ALL_CODE_FILES)
+	@\$(RM) \$(MAIN_DEPEND_FILE)
+	@echo updating main depend file \$(MAIN_DEPEND_FILE)
+	@echo \$(foreach srcfile,\$(ALL_SRC_FILES),"\n"\$(abspath \$(OBJDIR))/_\$(addsuffix .d,\$(basename \$(srcfile))):\$(srcfile)) >> \$(MAIN_DEPEND_FILE)
+
+ifneq (\$(MAKECMDGOALS),clean)
+-include \$(MAIN_DEPEND_FILE)
+-include \$(ALL_DEPEND_FILES)
+endif
+
+%.d:
+	@\$(RM) \$@
+	@\$(MKDIR) \$(dir \$@)
+	@echo updating \$(notdir \$@)
+	@\$(CXX_FIXED) -MM \$(filter \$(foreach srcext,\$(SRCEXTS),%.\$(srcext)),\$(shell find \$(basename \$(subst \$(abspath \$(OBJDIR))/_,,\$(abspath \$@))).* -type f)) -MT \$(abspath \$(addsuffix .o, \$(basename \$@))) -MF \$(abspath \$@)
+
+# object dependencies
+%.o:
+	@echo building \$(notdir \$@)
+	@\$(CXX_FIXED) \$(CXXFLAGS) -c \$(filter \$(foreach srcext,\$(SRCEXTS),%.\$(srcext)),\$(shell find \$(basename \$(subst \$(abspath \$(OBJDIR))/_,,\$(abspath \$@))).* -type f)) -o \$(abspath \$@)
+
+prebuild:
+	@\$(MKDIR) \$(OBJDIR)
+	@for objdir in \$(ALL_OBJ_DIRS); do \$(MKDIR) \$\${objdir}; done
+
+endsnippet
+
