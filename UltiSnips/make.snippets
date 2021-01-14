@@ -2,7 +2,7 @@ priority -10
 
 # ============================================================
 snippet template "file template" bm
-${5}
+${6}
 #============================================================
 # Usage:
 #   make                same as make release
@@ -21,8 +21,9 @@ SRCDIRS         := ${1:src}
 # output directory
 OUTDIR          := ${2:build}
 OBJDIR          := \$(OUTDIR)/obj
-# the executable to build to
 TARGET          := ${3:\$(OUTDIR)/${4:a.out}}
+# app(default) / shared / static
+TARGET_TYPE     := ${5:app}
 
 #============================================================
 # flags for different builds
@@ -41,6 +42,7 @@ RELEASE_LFLAGS  :=
 CROSS_COMPILE   :=
 CC              := gcc
 CXX             := g++
+AR              := ar rcs
 
 
 
@@ -98,7 +100,13 @@ clean:
 # actual code dependencies section
 \$(TARGET): \$(ALL_OBJ_FILES)
 	@echo building \$(TARGET)
+ifeq (\$(TARGET_TYPE),shared)
+	@\$(CXX_FIXED) \$(CXXFLAGS) \$+ -o \$@ --shared \$(CXXLFLAGS)
+else ifeq (\$(TARGET_TYPE),static)
+	@\$(AR) \$@ \$+
+else
 	@\$(CXX_FIXED) \$(CXXFLAGS) \$+ -o \$@ \$(CXXLFLAGS)
+endif
 
 # depend file dependecies
 \$(MAIN_DEPEND_FILE):\$(ALL_CODE_FILES)
