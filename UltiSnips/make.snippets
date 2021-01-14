@@ -19,7 +19,7 @@ ${5}
 # sources directories, can be one or more
 SRCDIRS         := ${1:src}
 # output directory
-OUTDIR          := ${2:out}
+OUTDIR          := ${2:build}
 OBJDIR          := \$(OUTDIR)/obj
 # the executable to build to
 TARGET          := ${3:\$(OUTDIR)/${4:a.out}}
@@ -27,8 +27,8 @@ TARGET          := ${3:\$(OUTDIR)/${4:a.out}}
 #============================================================
 # flags for different builds
 #============================================================
-BASE_FLAGS      := -Wall
-BASE_LFLAGS     :=
+BASE_FLAGS      := -Wall -DKMM_USE_ICONV
+BASE_LFLAGS     := -liconv
 DEBUG_FLAGS     := -g
 DEBUG_LFLAGS    :=
 RELEASE_FLAGS   := -O2
@@ -39,6 +39,8 @@ RELEASE_LFLAGS  :=
 #============================================================
 # cross-compiler
 CROSS_COMPILE   :=
+CC              := gcc
+CXX             := g++
 
 
 
@@ -47,19 +49,16 @@ CROSS_COMPILE   :=
 #============================================================
 SRCEXTS     := c C cc cpp CPP c++ cxx cp
 HEADEREXTS  := h H hh hpp HPP h++ hxx hp
-CC          := gcc
-CXX         := g++
 RM          := rm -rf
 MKDIR       := mkdir -p
 # CLEAR       := clear
 CLEAR       :=
 
 # files and directories
-ALL_SRC_DIRS:=\$(strip \$(subst \,/,\$(abspath \$(shell find \$(SRCDIRS) -type d))))
-ALL_OBJ_DIRS:=\$(strip \$(foreach srcdir,\$(ALL_SRC_DIRS),\$(OBJDIR)/_\$(abspath \$(srcdir))))
-ALL_SRC_FILES:=\$(strip \$(foreach srcdir,\$(ALL_SRC_DIRS), \$(foreach srcext,\$(SRCEXTS),\$(abspath \$(wildcard \$(srcdir)/*.\$(srcext))))))
-ALL_OBJ_FILES:=\$(strip \$(foreach srcfile,\$(ALL_SRC_FILES),\$(abspath \$(OBJDIR)/_\$(addsuffix .o,\$(basename \$(srcfile))))))
-ALL_DEPEND_FILES:=\$(strip \$(foreach srcfile,\$(ALL_SRC_FILES),\$(abspath \$(OBJDIR)/_\$(addsuffix .d,\$(basename \$(srcfile))))))
+ALL_SRC_DIRS:=\$(strip \$(subst \,/,\$(shell find \$(SRCDIRS) -type d)))
+ALL_SRC_FILES:=\$(strip \$(foreach srcdir,\$(ALL_SRC_DIRS), \$(foreach srcext,\$(SRCEXTS),\$(wildcard \$(srcdir)/*.\$(srcext)))))
+ALL_OBJ_FILES:=\$(strip \$(foreach srcfile,\$(ALL_SRC_FILES),\$(abspath \$(OBJDIR)/_\$(subst .,_,\$(subst :,_,\$(dir \$(srcfile))))/\$(addsuffix .o,\$(basename \$(notdir \$(srcfile)))))))
+ALL_DEPEND_FILES:=\$(strip \$(foreach srcfile,\$(ALL_SRC_FILES),\$(abspath \$(OBJDIR)/_\$(subst .,_,\$(subst :,_,\$(dir \$(srcfile))))/\$(addsuffix .d,\$(basename \$(notdir \$(srcfile)))))))
 MAIN_DEPEND_FILE:=\$(OUTDIR)/.depend
 ALL_HEADER_FILES:=\$(strip \$(foreach srcdir,\$(ALL_SRC_DIRS), \$(foreach headerext,\$(HEADEREXTS),\$(abspath \$(wildcard \$(srcdir)/*.\$(headerext))))))
 ALL_CODE_FILES:=\$(ALL_SRC_FILES) \$(ALL_HEADER_FILES)
@@ -74,7 +73,7 @@ endif
 
 .PHONY: all debug release run clean prebuild postbuild
 
-all: debug
+all: release
 
 # Make a debug version
 debug: CXXFLAGS:=\$(BASE_FLAGS) \$(DEBUG_FLAGS)
@@ -93,8 +92,8 @@ run: debug
 
 # Make everything go away (be clean)
 clean:
-	@\$(RM) \$(OBJDIR)
 	@\$(RM) \$(OUTDIR)
+	@\$(RM) \$(OBJDIR)
 
 # actual code dependencies section
 \$(TARGET): \$(ALL_OBJ_FILES)
@@ -105,7 +104,7 @@ clean:
 \$(MAIN_DEPEND_FILE):\$(ALL_CODE_FILES)
 	@\$(RM) \$(MAIN_DEPEND_FILE)
 	@echo updating main depend file \$(MAIN_DEPEND_FILE)
-	@echo \$(foreach srcfile,\$(ALL_SRC_FILES),"\n"\$(abspath \$(OBJDIR))/_\$(addsuffix .d,\$(basename \$(srcfile))):\$(srcfile)) >> \$(MAIN_DEPEND_FILE)
+	@echo \$(foreach srcfile,\$(ALL_SRC_FILES),"\n"\$(abspath \$(OBJDIR)/_\$(subst .,_,\$(subst :,_,\$(dir \$(srcfile))))/\$(addsuffix .d,\$(basename \$(notdir \$(srcfile))))):\$(srcfile)) >> \$(MAIN_DEPEND_FILE)
 
 ifneq (\$(MAKECMDGOALS),clean)
 -include \$(MAIN_DEPEND_FILE)
@@ -124,8 +123,8 @@ endif
 	@\$(CXX_FIXED) \$(CXXFLAGS) -c \$(filter \$(foreach srcext,\$(SRCEXTS),%.\$(srcext)),\$(shell find \$(basename \$(subst \$(abspath \$(OBJDIR))/_,,\$(abspath \$@))).* -type f)) -o \$(abspath \$@)
 
 prebuild:
+	@\$(MKDIR) \$(OUTDIR)
 	@\$(MKDIR) \$(OBJDIR)
-	@for objdir in \$(ALL_OBJ_DIRS); do \$(MKDIR) \$\${objdir}; done
 
 endsnippet
 
