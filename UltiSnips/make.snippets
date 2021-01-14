@@ -16,14 +16,15 @@ ${6}
 #============================================================
 # general project structure
 #============================================================
-# sources directories, can be one or more
-SRCDIRS         := ${1:src}
-# output directory
-OUTDIR          := ${2:build}
-OBJDIR          := \$(OUTDIR)/obj
-TARGET          := ${3:\$(OUTDIR)/${4:a.out}}
 # app(default) / shared / static
-TARGET_TYPE     := ${5:app}
+TARGET_TYPE     := ${1:app}
+# sources directories, can be one or more
+SRCDIRS         := ${2:src}
+# output directory
+OUTDIR          := ${3:build}
+OBJDIR          := \$(OUTDIR)/obj
+TARGET_HEADER   := \$(OUTDIR)/include
+TARGET          := ${4:\$(OUTDIR)/${5:a.out}}
 
 #============================================================
 # flags for different builds
@@ -57,12 +58,12 @@ MKDIR       := mkdir -p
 CLEAR       :=
 
 # files and directories
-ALL_SRC_DIRS:=\$(strip \$(subst \,/,\$(shell find \$(SRCDIRS) -type d)))
-ALL_SRC_FILES:=\$(strip \$(foreach srcdir,\$(ALL_SRC_DIRS), \$(foreach srcext,\$(SRCEXTS),\$(wildcard \$(srcdir)/*.\$(srcext)))))
+ALL_SRC_DIRS:=\$(strip \$(subst \,/,\$(shell find "\$(SRCDIRS)" -type d)))
+ALL_SRC_FILES:=\$(strip \$(foreach srcdir,\$(ALL_SRC_DIRS),\$(foreach srcext,\$(SRCEXTS),\$(wildcard \$(srcdir)/*.\$(srcext)))))
 ALL_OBJ_FILES:=\$(strip \$(foreach srcfile,\$(ALL_SRC_FILES),\$(abspath \$(OBJDIR)/_\$(subst .,_,\$(subst :,_,\$(dir \$(srcfile))))/\$(addsuffix .o,\$(basename \$(notdir \$(srcfile)))))))
 ALL_DEPEND_FILES:=\$(strip \$(foreach srcfile,\$(ALL_SRC_FILES),\$(abspath \$(OBJDIR)/_\$(subst .,_,\$(subst :,_,\$(dir \$(srcfile))))/\$(addsuffix .d,\$(basename \$(notdir \$(srcfile)))))))
 MAIN_DEPEND_FILE:=\$(OUTDIR)/.depend
-ALL_HEADER_FILES:=\$(strip \$(foreach srcdir,\$(ALL_SRC_DIRS), \$(foreach headerext,\$(HEADEREXTS),\$(abspath \$(wildcard \$(srcdir)/*.\$(headerext))))))
+ALL_HEADER_FILES:=\$(strip \$(foreach srcdir,\$(ALL_SRC_DIRS),\$(foreach headerext,\$(HEADEREXTS),\$(wildcard \$(srcdir)/*.\$(headerext)))))
 ALL_CODE_FILES:=\$(ALL_SRC_FILES) \$(ALL_HEADER_FILES)
 ALL_SRC_EXCEPT_C:=\$(filter-out %.c %.C,\$(ALL_SRC_FILES))
 
@@ -123,16 +124,20 @@ endif
 	@\$(RM) \$@
 	@\$(MKDIR) \$(dir \$@)
 	@echo updating \$(notdir \$@)
-	@\$(CXX_FIXED) -MM \$(filter \$(foreach srcext,\$(SRCEXTS),%.\$(srcext)),\$(shell find \$(basename \$(subst \$(abspath \$(OBJDIR))/_,,\$(abspath \$@))).* -type f)) -MT \$(abspath \$(addsuffix .o, \$(basename \$@))) -MF \$(abspath \$@)
+	@\$(CXX_FIXED) -MM \$(filter \$(foreach srcext,\$(SRCEXTS),%.\$(srcext)),\$(shell find "\$(basename \$(subst \$(abspath \$(OBJDIR))/_,,\$(abspath \$@)))".* -type f)) -MT \$(abspath \$(addsuffix .o,\$(basename \$@))) -MF \$(abspath \$@)
 
 # object dependencies
 %.o:
 	@echo building \$(notdir \$@)
-	@\$(CXX_FIXED) \$(CXXFLAGS) -c \$(filter \$(foreach srcext,\$(SRCEXTS),%.\$(srcext)),\$(shell find \$(basename \$(subst \$(abspath \$(OBJDIR))/_,,\$(abspath \$@))).* -type f)) -o \$(abspath \$@)
+	@\$(CXX_FIXED) \$(CXXFLAGS) -c \$(filter \$(foreach srcext,\$(SRCEXTS),%.\$(srcext)),\$(shell find "\$(basename \$(subst \$(abspath \$(OBJDIR))/_,,\$(abspath \$@)))".* -type f)) -o \$(abspath \$@)
 
 prebuild:
 	@\$(MKDIR) \$(OUTDIR)
 	@\$(MKDIR) \$(OBJDIR)
+
+postbuild:
+	\$(if \$(foreach headerfile,\$(ALL_HEADER_FILES),\$(shell mkdir -p "\$(dir \$(TARGET_HEADER)/\$(subst .,_,\$(subst :,_,\$(headerfile))))" && cp "\$(headerfile)" "\$(dir \$(TARGET_HEADER)/\$(subst .,_,\$(subst :,_,\$(headerfile))))/\$(notdir \$(headerfile))")),)
+	@echo build finished
 
 endsnippet
 
