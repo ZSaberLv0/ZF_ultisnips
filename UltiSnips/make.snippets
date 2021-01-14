@@ -57,6 +57,14 @@ MKDIR       := mkdir -p
 # CLEAR       := clear
 CLEAR       :=
 
+ifeq (\$(TARGET_TYPE),shared)
+_IS_LIB:=1
+else ifeq (\$(TARGET_TYPE),static)
+_IS_LIB:=1
+else
+_IS_LIB:=0
+endif
+
 # files and directories
 ALL_SRC_DIRS:=\$(strip \$(subst \,/,\$(shell find "\$(SRCDIRS)" -type d)))
 ALL_SRC_FILES:=\$(strip \$(foreach srcdir,\$(ALL_SRC_DIRS),\$(foreach srcext,\$(SRCEXTS),\$(wildcard \$(srcdir)/*.\$(srcext)))))
@@ -136,13 +144,6 @@ prebuild:
 	@\$(MKDIR) \$(OBJDIR)
 
 postbuild:
-ifeq (\$(TARGET_TYPE),shared)
-	_IS_LIB:=1
-else ifeq (\$(TARGET_TYPE),static)
-	_IS_LIB:=1
-else
-	_IS_LIB:=0
-endif
 ifeq (\$(_IS_LIB),1)
 	\$(if \$(foreach srcdir,\$(SRCDIRS),\$(foreach headerfile,\$(foreach headerext,\$(HEADEREXTS),\$(shell find "\$(srcdir)" -type f -name "*.\$(headerext)")),\$(shell mkdir -p "\$(TARGET_HEADER)/\$(dir \$(subst \$(abspath \$(srcdir))/,,\$(abspath \$(headerfile))))" && cp "\$(headerfile)" "\$(TARGET_HEADER)/\$(subst \$(abspath \$(srcdir))/,,\$(abspath \$(headerfile)))"))),)
 endif
