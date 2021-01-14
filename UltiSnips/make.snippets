@@ -29,8 +29,8 @@ TARGET          := ${4:\$(OUTDIR)/${5:a.out}}
 #============================================================
 # flags for different builds
 #============================================================
-BASE_FLAGS      := -Wall -DKMM_USE_ICONV
-BASE_LFLAGS     := -liconv
+BASE_FLAGS      := -Wall
+BASE_LFLAGS     :=
 DEBUG_FLAGS     := -g
 DEBUG_LFLAGS    :=
 RELEASE_FLAGS   := -O2
