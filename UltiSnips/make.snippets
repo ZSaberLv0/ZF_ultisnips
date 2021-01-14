@@ -136,7 +136,16 @@ prebuild:
 	@\$(MKDIR) \$(OBJDIR)
 
 postbuild:
-	\$(if \$(foreach headerfile,\$(ALL_HEADER_FILES),\$(shell mkdir -p "\$(dir \$(TARGET_HEADER)/\$(subst .,_,\$(subst :,_,\$(headerfile))))" && cp "\$(headerfile)" "\$(dir \$(TARGET_HEADER)/\$(subst .,_,\$(subst :,_,\$(headerfile))))/\$(notdir \$(headerfile))")),)
+ifeq (\$(TARGET_TYPE),shared)
+	_IS_LIB:=1
+else ifeq (\$(TARGET_TYPE),static)
+	_IS_LIB:=1
+else
+	_IS_LIB:=0
+endif
+ifeq (\$(_IS_LIB),1)
+	\$(if \$(foreach srcdir,\$(SRCDIRS),\$(foreach headerfile,\$(foreach headerext,\$(HEADEREXTS),\$(shell find "\$(srcdir)" -type f -name "*.\$(headerext)")),\$(shell mkdir -p "\$(TARGET_HEADER)/\$(dir \$(subst \$(abspath \$(srcdir))/,,\$(abspath \$(headerfile))))" && cp "\$(headerfile)" "\$(TARGET_HEADER)/\$(subst \$(abspath \$(srcdir))/,,\$(abspath \$(headerfile)))"))),)
+endif
 	@echo build finished
 
 endsnippet
