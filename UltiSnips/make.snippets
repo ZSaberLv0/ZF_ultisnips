@@ -82,44 +82,49 @@ else                            # C++ program
 	CXX_FIXED:=\$(CROSS_COMPILE)\$(CXX)
 endif
 
+ifeq (\$(MAKECMDGOALS),debug)
+CXXFLAGS:=\$(BASE_FLAGS) \$(DEBUG_FLAGS)
+CXXLFLAGS:=\$(BASE_LFLAGS) \$(DEBUG_LFLAGS)
+else
+CXXFLAGS:=\$(BASE_FLAGS) \$(RELEASE_FLAGS)
+CXXLFLAGS:=\$(BASE_LFLAGS) \$(RELEASE_LFLAGS)
+endif
+
 .PHONY: all debug release run clean prebuild postbuild
 
 all: release
 
 # Make a debug version
-debug: CXXFLAGS:=\$(BASE_FLAGS) \$(DEBUG_FLAGS)
-debug: CXXLFLAGS:=\$(BASE_LFLAGS) \$(DEBUG_LFLAGS)
 debug: \$(MAIN_DEPEND_FILE) \$(ALL_DEPEND_FILES) prebuild \$(TARGET) postbuild
 
 # Make a release version
-release: CXXFLAGS:=\$(BASE_FLAGS) \$(RELEASE_FLAGS)
-release: CXXLFLAGS:=\$(BASE_LFLAGS) \$(RELEASE_LFLAGS)
 release: \$(MAIN_DEPEND_FILE) \$(ALL_DEPEND_FILES) prebuild \$(TARGET) postbuild
 
 # Make and run
 run: debug
 	@\$(CLEAR)
-	./\$(TARGET)
+	"./\$(TARGET)"
 
 # Make everything go away (be clean)
 clean:
-	@\$(RM) \$(OUTDIR)
-	@\$(RM) \$(OBJDIR)
+	@\$(RM) "\$(OUTDIR)"
+	@\$(RM) "\$(OBJDIR)"
 
 # actual code dependencies section
 \$(TARGET): \$(ALL_OBJ_FILES)
 	@echo building \$(TARGET)
 ifeq (\$(TARGET_TYPE),shared)
-	@\$(CXX_FIXED) \$(CXXFLAGS) \$+ -o \$@ --shared \$(CXXLFLAGS)
+	@\$(CXX_FIXED) \$(CXXFLAGS) \$(CXXLFLAGS) "\$+" -o "\$(notdir \$@)" --shared
+	@mv "\$(notdir \$@)" "\$@"
 else ifeq (\$(TARGET_TYPE),static)
-	@\$(AR) \$@ \$+
+	@\$(AR) "\$@" "\$+"
 else
-	@\$(CXX_FIXED) \$(CXXFLAGS) \$+ -o \$@ \$(CXXLFLAGS)
+	@\$(CXX_FIXED) \$(CXXFLAGS) \$(CXXLFLAGS) "\$+" -o "\$@"
 endif
 
 # depend file dependecies
 \$(MAIN_DEPEND_FILE):\$(ALL_CODE_FILES)
-	@\$(RM) \$(MAIN_DEPEND_FILE)
+	@\$(RM) "\$(MAIN_DEPEND_FILE)"
 	@echo updating main depend file \$(MAIN_DEPEND_FILE)
 	@echo \$(foreach srcfile,\$(ALL_SRC_FILES),"\n"\$(abspath \$(OBJDIR)/_\$(subst .,_,\$(subst :,_,\$(dir \$(srcfile))))/\$(addsuffix .d,\$(basename \$(notdir \$(srcfile))))):\$(srcfile)) >> \$(MAIN_DEPEND_FILE)
 
@@ -129,19 +134,19 @@ ifneq (\$(MAKECMDGOALS),clean)
 endif
 
 %.d:
-	@\$(RM) \$@
-	@\$(MKDIR) \$(dir \$@)
+	@\$(RM) "\$@"
+	@\$(MKDIR) "\$(dir \$@)"
 	@echo updating \$(notdir \$@)
-	@\$(CXX_FIXED) -MM \$(filter \$(foreach srcext,\$(SRCEXTS),%.\$(srcext)),\$(shell find "\$(basename \$(subst \$(abspath \$(OBJDIR))/_,,\$(abspath \$@)))".* -type f)) -MT \$(abspath \$(addsuffix .o,\$(basename \$@))) -MF \$(abspath \$@)
+	@\$(CXX_FIXED) \$(CXXFLAGS) -MM \$(filter \$(foreach srcext,\$(SRCEXTS),%.\$(srcext)),\$(shell find "\$(basename \$(subst \$(abspath \$(OBJDIR))/_,,\$(abspath \$@)))".* -type f)) -MT "\$(abspath \$(addsuffix .o,\$(basename \$@)))" -MF "\$(abspath \$@)"
 
 # object dependencies
 %.o:
 	@echo building \$(notdir \$@)
-	@\$(CXX_FIXED) \$(CXXFLAGS) -c \$(filter \$(foreach srcext,\$(SRCEXTS),%.\$(srcext)),\$(shell find "\$(basename \$(subst \$(abspath \$(OBJDIR))/_,,\$(abspath \$@)))".* -type f)) -o \$(abspath \$@)
+	@\$(CXX_FIXED) \$(CXXFLAGS) -c "\$(filter \$(foreach srcext,\$(SRCEXTS),%.\$(srcext)),\$(shell find "\$(basename \$(subst \$(abspath \$(OBJDIR))/_,,\$(abspath \$@)))".* -type f))" -o "\$(abspath \$@)"
 
 prebuild:
-	@\$(MKDIR) \$(OUTDIR)
-	@\$(MKDIR) \$(OBJDIR)
+	@\$(MKDIR) "\$(OUTDIR)"
+	@\$(MKDIR) "\$(OBJDIR)"
 
 postbuild:
 ifeq (\$(_IS_LIB),1)
