@@ -114,12 +114,12 @@ clean:
 \$(TARGET): \$(ALL_OBJ_FILES)
 	@echo building \$(TARGET)
 ifeq (\$(TARGET_TYPE),shared)
-	@\$(CXX_FIXED) \$(CXXFLAGS) \$(CXXLFLAGS) "\$+" -o "\$(notdir \$@)" --shared
+	@\$(CXX_FIXED) \$(CXXFLAGS) \$(CXXLFLAGS) \$+ -o "\$(notdir \$@)" --shared
 	@mv "\$(notdir \$@)" "\$@"
 else ifeq (\$(TARGET_TYPE),static)
-	@\$(AR) "\$@" "\$+"
+	@\$(AR) "\$@" \$+
 else
-	@\$(CXX_FIXED) \$(CXXFLAGS) \$(CXXLFLAGS) "\$+" -o "\$@"
+	@\$(CXX_FIXED) \$(CXXFLAGS) \$(CXXLFLAGS) \$+ -o "\$@"
 endif
 
 # depend file dependecies
