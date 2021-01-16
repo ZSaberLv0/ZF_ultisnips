@@ -165,6 +165,7 @@ prebuild:
 	@\$(MKDIR) "\$(OUTDIR)"
 	@\$(MKDIR) "\$(OBJDIR)"
 
+postbuild: \$(TARGET)
 postbuild:
 ifeq (\$(_IS_LIB),1)
 	\$(if \$(foreach srcdir,\$(SRCDIRS),\$(foreach headerfile,\$(foreach headerext,\$(HEADEREXTS),\$(shell find "\$(srcdir)" -type f -name "*.\$(headerext)")),\$(shell mkdir -p "\$(TARGET_HEADER)/\$(dir \$(subst \$(abspath \$(srcdir))/,,\$(abspath \$(headerfile))))" && cp "\$(headerfile)" "\$(TARGET_HEADER)/\$(subst \$(abspath \$(srcdir))/,,\$(abspath \$(headerfile)))"))),)
