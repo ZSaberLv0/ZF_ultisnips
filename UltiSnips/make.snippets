@@ -132,6 +132,7 @@ clean:
 # actual code dependencies section
 \$(TARGET): \$(ALL_OBJ_FILES)
 	@echo building \$(TARGET)
+	@\$(MKDIR) "\$(dir \$(TARGET))"
 ifeq (\$(TARGET_TYPE),shared)
 	@\$(CXX_FIXED) \$(CXXFLAGS) \$(CXXLFLAGS) \$+ -o "\$(notdir \$@)" --shared
 	@mv "\$(notdir \$@)" "\$@"
