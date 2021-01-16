@@ -2,7 +2,7 @@ priority -10
 
 # ============================================================
 snippet template "file template" bm
-${6}
+
 #============================================================
 # Usage:
 #   make                same as make release
@@ -25,7 +25,7 @@ OUTDIR          := ${3:build}
 OBJDIR          := \$(OUTDIR)/obj
 TARGET_HEADER   := \$(OUTDIR)/include
 TARGET          := ${4:\$(OUTDIR)/${5:a.out}}
-
+${6}
 #============================================================
 # flags for different builds
 #============================================================
@@ -50,12 +50,10 @@ AR              := ar rcs
 #============================================================
 # no need to change these
 #============================================================
-SRCEXTS     := c C cc cpp CPP c++ cxx cp
-HEADEREXTS  := h H hh hpp HPP h++ hxx hp
+SRCEXTS     := c C cc cpp CPP c++ cxx
+HEADEREXTS  := h H hh hpp HPP h++ hxx
 RM          := rm -rf
 MKDIR       := mkdir -p
-# CLEAR       := clear
-CLEAR       :=
 
 ifeq (\$(TARGET_TYPE),shared)
 _IS_LIB:=1
@@ -65,11 +63,29 @@ else
 _IS_LIB:=0
 endif
 
+# tricks to solve special path
+# _M_PFX:
+#     with the tricks:
+#         abc/xyz  => \$(OUTDIR)/_abc/xyz  => abc/xyz
+#         /abc/xyz => \$(OUTDIR)/_/abc/xyz => /abc/xyz
+#     without the tricks:
+#         abc/xyz  => \$(OUTDIR)/abc/xyz  => abc/xyz
+#         /abc/xyz => \$(OUTDIR)//abc/xyz => abc/xyz (ERROR)
+# _M_DOT:
+#     with the tricks:
+#         ./abc  => \$(OUTDIR)/!DOT!/abc  => ./abc
+#         ../abc => \$(OUTDIR)/!DOT!!DOT!/abc => ../abc
+#     without the tricks:
+#         ./abc  => \$(OUTDIR)/abc  => ./abc
+#         ../abc => \$(OUTDIR_PARENT)/abc => (unable to convert) (ERROR)
+_M_PFX:=_
+_M_DOT:=!DOT!
+
 # files and directories
-ALL_SRC_DIRS:=\$(strip \$(subst \,/,\$(shell find "\$(SRCDIRS)" -type d)))
+ALL_SRC_DIRS:=\$(strip \$(shell find "\$(SRCDIRS)" -type d))
 ALL_SRC_FILES:=\$(strip \$(foreach srcdir,\$(ALL_SRC_DIRS),\$(foreach srcext,\$(SRCEXTS),\$(wildcard \$(srcdir)/*.\$(srcext)))))
-ALL_OBJ_FILES:=\$(strip \$(foreach srcfile,\$(ALL_SRC_FILES),\$(abspath \$(OBJDIR)/_\$(subst .,_,\$(subst :,_,\$(dir \$(srcfile))))/\$(addsuffix .o,\$(basename \$(notdir \$(srcfile)))))))
-ALL_DEPEND_FILES:=\$(strip \$(foreach srcfile,\$(ALL_SRC_FILES),\$(abspath \$(OBJDIR)/_\$(subst .,_,\$(subst :,_,\$(dir \$(srcfile))))/\$(addsuffix .d,\$(basename \$(notdir \$(srcfile)))))))
+ALL_OBJ_FILES:=\$(strip \$(foreach srcfile,\$(ALL_SRC_FILES),\$(abspath \$(OBJDIR)/\$(_M_PFX)\$(subst .,\$(_M_DOT),\$(dir \$(srcfile)))/\$(addsuffix .o,\$(basename \$(notdir \$(srcfile)))))))
+ALL_DEPEND_FILES:=\$(strip \$(foreach srcfile,\$(ALL_SRC_FILES),\$(abspath \$(OBJDIR)/\$(_M_PFX)\$(subst .,\$(_M_DOT),\$(dir \$(srcfile)))/\$(addsuffix .d,\$(basename \$(notdir \$(srcfile)))))))
 MAIN_DEPEND_FILE:=\$(OUTDIR)/.depend
 ALL_HEADER_FILES:=\$(strip \$(foreach srcdir,\$(ALL_SRC_DIRS),\$(foreach headerext,\$(HEADEREXTS),\$(wildcard \$(srcdir)/*.\$(headerext)))))
 ALL_CODE_FILES:=\$(ALL_SRC_FILES) \$(ALL_HEADER_FILES)
@@ -90,6 +106,7 @@ CXXFLAGS:=\$(BASE_FLAGS) \$(RELEASE_FLAGS)
 CXXLFLAGS:=\$(BASE_LFLAGS) \$(RELEASE_LFLAGS)
 endif
 
+#============================================================
 .PHONY: all debug release run clean prebuild postbuild
 
 all: release
@@ -102,14 +119,16 @@ release: \$(MAIN_DEPEND_FILE) \$(ALL_DEPEND_FILES) prebuild \$(TARGET) postbuild
 
 # Make and run
 run: debug
-	@\$(CLEAR)
+	@echo ==================== \$(TARGET) ====================
 	"./\$(TARGET)"
+	@echo -------------------- \$(TARGET) --------------------
 
 # Make everything go away (be clean)
 clean:
 	@\$(RM) "\$(OUTDIR)"
 	@\$(RM) "\$(OBJDIR)"
 
+#============================================================
 # actual code dependencies section
 \$(TARGET): \$(ALL_OBJ_FILES)
 	@echo building \$(TARGET)
@@ -122,11 +141,10 @@ else
 	@\$(CXX_FIXED) \$(CXXFLAGS) \$(CXXLFLAGS) \$+ -o "\$@"
 endif
 
-# depend file dependecies
 \$(MAIN_DEPEND_FILE):\$(ALL_CODE_FILES)
 	@\$(RM) "\$(MAIN_DEPEND_FILE)"
 	@echo updating main depend file \$(MAIN_DEPEND_FILE)
-	@echo \$(foreach srcfile,\$(ALL_SRC_FILES),"\n"\$(abspath \$(OBJDIR)/_\$(subst .,_,\$(subst :,_,\$(dir \$(srcfile))))/\$(addsuffix .d,\$(basename \$(notdir \$(srcfile))))):\$(srcfile)) >> \$(MAIN_DEPEND_FILE)
+	@echo \$(foreach srcfile,\$(ALL_SRC_FILES),"\n"\$(abspath \$(OBJDIR)/\$(_M_PFX)\$(subst .,\$(_M_DOT),\$(dir \$(srcfile)))/\$(addsuffix .d,\$(basename \$(notdir \$(srcfile))))):\$(srcfile)) >> \$(MAIN_DEPEND_FILE)
 
 ifneq (\$(MAKECMDGOALS),clean)
 -include \$(MAIN_DEPEND_FILE)
@@ -137,12 +155,11 @@ endif
 	@\$(RM) "\$@"
 	@\$(MKDIR) "\$(dir \$@)"
 	@echo updating \$(notdir \$@)
-	@\$(CXX_FIXED) \$(CXXFLAGS) -MM \$(filter \$(foreach srcext,\$(SRCEXTS),%.\$(srcext)),\$(shell find "\$(basename \$(subst \$(abspath \$(OBJDIR))/_,,\$(abspath \$@)))".* -type f)) -MT "\$(abspath \$(addsuffix .o,\$(basename \$@)))" -MF "\$(abspath \$@)"
+	@\$(CXX_FIXED) \$(CXXFLAGS) -MM \$(filter \$(foreach srcext,\$(SRCEXTS),%.\$(srcext)),\$(shell find "\$(basename \$(subst \$(_M_DOT),.,\$(subst \$(abspath \$(OBJDIR))/\$(_M_PFX),,\$(abspath \$@))))".* -type f)) -MT "\$(abspath \$(addsuffix .o,\$(basename \$@)))" -MF "\$(abspath \$@)"
 
-# object dependencies
 %.o:
 	@echo building \$(notdir \$@)
-	@\$(CXX_FIXED) \$(CXXFLAGS) -c "\$(filter \$(foreach srcext,\$(SRCEXTS),%.\$(srcext)),\$(shell find "\$(basename \$(subst \$(abspath \$(OBJDIR))/_,,\$(abspath \$@)))".* -type f))" -o "\$(abspath \$@)"
+	@\$(CXX_FIXED) \$(CXXFLAGS) -c "\$(filter \$(foreach srcext,\$(SRCEXTS),%.\$(srcext)),\$(shell find "\$(basename \$(subst \$(_M_DOT),.,\$(subst \$(abspath \$(OBJDIR))/\$(_M_PFX),,\$(abspath \$@))))".* -type f))" -o "\$(abspath \$@)"
 
 prebuild:
 	@\$(MKDIR) "\$(OUTDIR)"
