@@ -43,6 +43,28 @@ fi${4}
 endsnippet
 
 # ============================================================
+snippet getopts "getopts" bm
+
+for arg in "\$@"; do
+	shift
+	case "\$arg" in
+		"--${2:help}") set -- "\$@" "-`!p snip.rv = t[1]`" ;;
+		*) set -- "\$@" "\$arg" ;;
+	esac
+done
+${4:# -h      =>  h
+# -h abc  =>  h:
+}while getopts "`!p snip.rv = t[1]`:" opt >/dev/null 2>&1 ; do
+	case "\$opt" in
+		"${1:h}") ${3:echo h: \$OPTARG} ;;
+		"?") echo invalid option: \$OPTARG ;;
+	esac
+done
+${5}
+endsnippet
+
+
+# ============================================================
 snippet null "output to null" im
 >/dev/null 2>&1${1}
 endsnippet
