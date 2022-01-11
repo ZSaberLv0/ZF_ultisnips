@@ -12,7 +12,7 @@ def list_snippets():
     snippets = UltiSnips_Manager._snips(before, True)
 
     if len(snippets) == 0:
-        UltiSnips_Manager._handle_failure(vim.eval("g:UltiSnipsListSnippets"))
+        # UltiSnips_Manager._handle_failure(vim.eval("g:UltiSnipsListSnippets"))
         return True
 
     # Sort snippets alphabetically

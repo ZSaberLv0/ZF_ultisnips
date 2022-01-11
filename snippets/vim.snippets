@@ -1,0 +1,59 @@
+# ============================================================
+snippet augroup "augroup declare"
+	augroup ${1:group_name}
+		autocmd!
+		autocmd ${2:Event} ${3:action}
+	augroup END${0}
+# ============================================================
+snippet cat "string concat"
+	.
+# ============================================================
+snippet command "command declare"
+	command! -nargs=${1:+} -complete=${2:dir} ${3:cmd_name} :call ${4:action}(<f-args>)${0}
+# ============================================================
+snippet exists "exists check"
+	exists('${1:content}')${0}
+# ============================================================
+snippet foreach "for loop"
+	for ${1:i} in ${2:range}
+		${3}
+	endfor${0}
+# ============================================================
+snippet func "function declare"
+	function! ${1:FuncName}(${2})
+		${3}
+	endfunction${0}
+# ============================================================
+snippet has "has feature check"
+	has('${1:feature}')${0}
+# ============================================================
+snippet if "if statement"
+	if ${1:cond}
+	endif${2}
+# ============================================================
+snippet plug "plugin declare"
+	if !exists('g:${1:PlugCondName}')
+		let g:${1}=1
+	endif
+	if g:${1}==1
+		${4:Plug} '${2:UserName}/${3:PlugName}'
+	endif${0}
+# ============================================================
+snippet profile "profile performance test"
+	let _start_time = reltime()
+	${1}
+	echo float2nr(reltimefloat(reltime(_start_time, reltime())) * 1000)${0}
+# ============================================================
+snippet try "try catch"
+	try
+		${1:content}
+	catch
+		${2:catch_action}
+	finally
+		${3:final_action}
+	endtry${0}
+# ============================================================
+snippet while "while loop"
+	while ${1:cond}
+	endwhile${0}
+# ============================================================

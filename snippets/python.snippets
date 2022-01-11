@@ -1,0 +1,13 @@
+# ============================================================
+snippet cat "string concat"
+	+
+# ============================================================
+snippet CD "current script dir"
+	import os
+	${1:WORK_DIR} = os.path.split(os.path.realpath(__file__))[0]${0}
+# ============================================================
+snippet profile "profile performance test"
+	import time; _startTime = time.time();
+	${1}
+	print(int((time.time() - _startTime) * 1000))${0}
+# ============================================================

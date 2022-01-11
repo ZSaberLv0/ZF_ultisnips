@@ -1,0 +1,107 @@
+# ============================================================
+snippet template "file template"
+	@echo off
+	setlocal
+	setlocal enabledelayedexpansion
+	set WORK_DIR=%~dp0
+	set ${1:DST_PATH}=%~1%
+	set ${2:SRC_PATH}=%~2%
+	if not defined ${1} goto :usage
+	if not defined ${2} goto :usage
+	goto :run
+	:usage
+	echo usage:
+	exit /b 1
+	:run
+	${0}
+# ============================================================
+snippet calc "calc"
+	set /a ${2:ResultName}=${1:A+B}${0}
+# ============================================================
+snippet cd "current dir"
+	set ${1:_OLD_DIR}=%cd%${0}
+# ============================================================
+snippet CD "current script dir"
+	set ${1:WORK_DIR}=%~dp0${0}
+# ============================================================
+snippet extcmd "external command"
+	setlocal enabledelayedexpansion
+	set ${2:ResultName}=
+	for /f "delims=" %%a in ('${1:ExtCmd}') do (
+		if "!${2}!" == "" (
+			set ${2}=%%a
+		) else (
+			set ${2}=!${2}! %%a
+		)
+	)${0}
+# ============================================================
+snippet exist "file or dir exist"
+	if ${2:not }exist "${1:FilePath}" (
+		${3}
+	)${0}
+# ============================================================
+snippet null "output to null"
+	>nul 2>&1${0}
+# ============================================================
+snippet if "if statement"
+	if "%${1:Param}%" == "${2:{TestValue0}}" (
+		${3:{Action0}}
+	) else (
+		if "%${1}%" == "${4:{TestValue1}}" (
+			${5:{Action1}}
+		) else (
+			${6:{Action2}}
+		)
+	)${0}
+# ============================================================
+snippet for "for loop"
+	for /f "delims=" %%${1:i} in ('${2:ls}') do (
+		${3:echo} %%${1}
+	)${0}
+# ============================================================
+snippet foreach "for each element"
+	for %%${1:i} in (
+		${2:a b c}
+	) do (
+		${3:echo} %%${1}
+	)${0}
+# ============================================================
+snippet forrange "for in range"
+	for /l %%${1:i} in (${2:0},1,${3:10}) do (
+		${4:echo} %%${1}
+	)${0}
+# ============================================================
+snippet paramcheck "param empty check"
+	if not defined ${1:Param0} goto :usage
+	if not defined ${2:Param1} goto :usage
+	goto :run
+	:usage
+	${3:echo "show usage"}
+	exit /b 1
+	:run${0}
+# ============================================================
+snippet resultval "result value"
+	set ${1:RESULT} = %errorlevel%${0}
+# ============================================================
+snippet resultcheck "result value check"
+	set ${1:RESULT} = %errorlevel%
+	if not "%${1}%" == "0" (
+		exit /b %${1}%
+	)${0}
+# ============================================================
+snippet filebasename "file base name without ext"
+	for %%a in (%${1:ParamName}%) do set ${2:ResultName}=%%~na${0}
+# ============================================================
+snippet fileext "file ext"
+	for %%a in (%${1:ParamName}%) do set ${2:ResultName}=%%~xa
+	set ${2}=%${2}:~1,999%${0}
+# ============================================================
+snippet filename "file name"
+	for %%a in (%${1:ParamName}%) do set ${2:ResultName}=%%~nxa${0}
+# ============================================================
+snippet abspath "absolute path"
+	for %%i in (%${1:RelativePath}%) do set ${2:ResultName}=%%~fi${0}
+# ============================================================
+snippet parent "parent path"
+	for %%a in (%${1:ParamName}%\..) do set ${2:ResultName}=%%~fa${0}
+# ============================================================
