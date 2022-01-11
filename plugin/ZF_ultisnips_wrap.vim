@@ -1,6 +1,17 @@
 
+if has('python3')
+    let s:python_EOF='python3 << python_EOF'
+elseif has('python')
+    let s:python_EOF='python << python_EOF'
+else
+    let s:python_EOF=''
+endif
+
 function! ZF_ultisnips_ListSnippets_onekey() abort
-python3 << EOF
+    if empty(s:python_EOF)
+        return ''
+    endif
+execute s:python_EOF
 
 
 import vim
@@ -31,7 +42,7 @@ def list_snippets():
 list_snippets()
 
 
-EOF
-    return ""
+python_EOF
+    return ''
 endfunction
 
