@@ -1,23 +1,23 @@
 # ============================================================
 snippet #ifndef "#ifndef guard"
 	#ifndef ${1:_SomeHeader_h_}
-	#define ${1}
-	${2}
-	#endif // #ifndef ${1}${0}
+	#define $1
+	$2
+	#endif // #ifndef $1$0
 # ============================================================
 snippet for "for loop declare"
-	for(${1:int} ${2:i} = ${3:0}; ${2} < ${4:cond}; ++${2})
+	for(${1:int} ${2:i} = ${3:0}; $2 < ${4:cond}; ++$2)
 	{
 		${5:contents}
-	}${0}
+	}$0
 # ============================================================
 snippet switch "switch case declare"
 	switch(${1:cond})
 	{
 		case ${2:case1}:
-			${3}
+			$3
 			break;
 		default:
 			break;
-	}${0}
+	}$0
 # ============================================================

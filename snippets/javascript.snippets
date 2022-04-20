@@ -3,31 +3,31 @@ snippet cat "string concat"
 	+
 # ============================================================
 snippet for "for loop"
-	for(var ${1:i} = 0; ${1} < ${2:{count}}; ++${1}) {
-		${3}
-	}${0}
+	for(var ${1:i} = 0; $1 < ${2:count}; ++$1) {
+		$3
+	}$0
 # ============================================================
 snippet settimeout "setTimeout"
 	setTimeout(function() {
-		${2}
-	}, ${1:1000});${0}
+		$2
+	}, ${1:1000});$0
 # ============================================================
 snippet setinterval "setInterval"
 	setInterval(function() {
-		${2}
-	}, ${1:1000});${0}
+		$2
+	}, ${1:1000});$0
 # ============================================================
 snippet profile "profile performance test"
 	var _beginTime = Date.now();
-	${2}
-	console.log('${1:cost time: }' + (Date.now() - _beginTime));${0}
+	$2
+	console.log('${1:cost time: }' + (Date.now() - _beginTime));$0
 # ============================================================
 snippet umd "UMD module template"
 	(function(root, depNames, moduleName, factory, impl) {
 		impl(root, depNames, moduleName, factory);
-	}(this, [ // depNames${2}
+	}(this, [ // depNames$2
 	], '${1:YourModuleName}', function(deps) {
-		return ${0}{
+		return $0{
 			myFunc: function(aa) {
 				console.log(aa);
 			},
