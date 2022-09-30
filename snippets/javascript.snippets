@@ -17,6 +17,19 @@ snippet setinterval "setInterval"
 		$2
 	}, ${1:1000});$0
 # ============================================================
+snippet setter "setter and getter"
+	set ${1:name}(v) {
+		this._$1 = v;
+	}
+	get $1() {
+		return this._$1;
+	}$0
+# ============================================================
+snippet getter "getter"
+	get $1() {
+		return this._$1;
+	}$0
+# ============================================================
 snippet profile "profile performance test"
 	var _beginTime = Date.now();
 	$2
