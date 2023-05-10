@@ -76,6 +76,11 @@ snippet forrange "for in range"
 		${4:echo} \$$1
 	done$0
 # ============================================================
+snippet while "while loop"
+	while ${1:test "\$abc" = "1"} ; do
+		${2}
+	done$0
+# ============================================================
 snippet paramcheck "param empty check"
 	if test "x-\$${1:Param0}" = "x-" || test "x-\$${2:Param1}" = "x-" ; then
 		${3:echo "show usage"}
