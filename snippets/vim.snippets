@@ -9,7 +9,7 @@ snippet cat "string concat"
 	.
 # ============================================================
 snippet command "command declare"
-	command! -nargs=${1:+} -complete=${2:dir} ${3:cmd_name} :call ${4:action}(<f-args>)$0
+	command! -nargs=${1:+} -complete=${2:dir} ${3:cmd_name} :call ${4:action}(${5:<f-args>})$0
 # ============================================================
 snippet exists "exists check"
 	exists('${1:content}')$0
